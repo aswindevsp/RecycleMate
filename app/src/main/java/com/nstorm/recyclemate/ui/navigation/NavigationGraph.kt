@@ -1,4 +1,4 @@
-package com.example.gshop.ui.navigation
+package com.nstorm.recyclemate.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.gshop.ui.screens.onboarding.login.Login
-import com.example.gshop.ui.screens.onboarding.otp.Otp
+import com.example.gshop.ui.navigation.Destinations
+import com.nstorm.recyclemate.ui.screens.onboarding.login.LoginScreen
 
 @Composable
 fun NavigationGraph() {
@@ -43,11 +43,8 @@ private fun NavGraphBuilder.onBoardingLogin(
     navController: NavController
 ) {
     composable(Destinations.Login.routeTemplate) {
-        Login(
-            viewModel = hiltViewModel(),
-            navigateToOtp = {
-                navController.navigate(Destinations.Otp.createRoute())
-            }
+        LoginScreen(
+            viewModel = hiltViewModel()
         )
     }
 }
@@ -56,11 +53,10 @@ private fun NavGraphBuilder.onBoardingOtp(
     navController: NavController
 ) {
     composable(Destinations.Otp.routeTemplate) {
-        Otp(
-            navigateUp = {
-                navController.popBackStack()
-            }
-        )
+//        IdkSOmething(
+//            navigateUp = {
+//                navController.popBackStack()
+//            }
     }
 }
 
