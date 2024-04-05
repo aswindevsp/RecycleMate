@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "918855509235",
+    "project_id": "nstorm",
+    "storage_bucket": "nstorm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918855509235:android:11344955f5cc384d568386",
+        "android_client_info": {
+          "package_name": "com.nstorm.recyclemate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoM2eMdONKhRniko4Lh1wZ-JUfjDxuzIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
