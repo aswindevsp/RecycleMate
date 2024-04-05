@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.nstorm.recyclemate.ui.navigation.NavigationGraph
-import com.nstorm.recyclemate.ui.screens.homePages.home.HomeScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.nstorm.recyclemate.ui.screens.homePages.camerax.CameraScreen
 import com.nstorm.recyclemate.ui.theme.RecycleMateTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,8 +16,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RecycleMateTheme {
-//                NavigationGraph()
-                HomeScreen()
+                CameraScreen(
+                    this,
+                    viewmodel = hiltViewModel()
+                )
             }
         }
     }

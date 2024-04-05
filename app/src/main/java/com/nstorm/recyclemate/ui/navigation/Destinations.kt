@@ -15,4 +15,11 @@ sealed class Destinations(val routeTemplate: String) {
     data object Home: NoArgs("homePages/home")
 
 
+    data object Plastic: NoArgs("homePages/plastic")
+    data object Paper: NoArgs("homePages/paper")
+    data object Metal: NoArgs("homePages/leather")
+    data object Glass: NoArgs("homePages/glass")
+
+
+
 }

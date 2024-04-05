@@ -34,50 +34,63 @@ private infix fun String.onValueChange(any: Any) {
 }
 
 @Composable
-fun LoginScreen(viewModel: OnboardingViewModel) {
+fun LoginScreen(
+    onLoginClick: () -> Unit
+) {
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    Box(
-            modifier = Modifier
-                    .fillMaxSize()
-                        .paint(painter = painterResource(id = R.drawable.recycle),
-                                contentScale = ContentScale.Crop
-                        )
 
-    ){
+    val context = LocalContext.current
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .paint(
+                painter = painterResource(id = R.drawable.recycle),
+                contentScale = ContentScale.Crop
+            )
+
+    ) {
 
         Column(
-                modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 550.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 550.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Enter Username",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp)
-            TextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    singleLine = true,
-                    placeholder = { Text("Username") }
+            Text(
+                text = "Enter Username",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
             )
-            Text(text = "Password",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp)
             TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    singleLine = true,
-                    placeholder = { Text("Password") },
-                    visualTransformation = PasswordVisualTransformation()
+                value = name,
+                onValueChange = { name = it },
+                singleLine = true,
+                placeholder = { Text("Username") }
+            )
+            Text(
+                text = "Password",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+            TextField(
+                value = password,
+                onValueChange = { password = it },
+                singleLine = true,
+                placeholder = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation()
             )
             Button(onClick = {
-
+                if(name.isNotBlank() && password.isNotBlank()) {
+                   onLoginClick()
+                } else {
+                    Toast.makeText(context, "Please enter username and password", Toast.LENGTH_SHORT).show()
+                }
             }) {
-                    Text("Login")
+                Text("Login")
 
             }
         }

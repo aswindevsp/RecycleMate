@@ -1,7 +1,6 @@
 package com.nstorm.recyclemate.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -32,7 +31,7 @@ private fun NavGraphBuilder.onBoardingGraph(
     navController: NavController
 ) {
     navigation(
-        startDestination = Destinations.Login.createRoute(),
+        startDestination = Destinations.Intro.createRoute(),
         route = Destinations.OnBoarding.routeTemplate
     ) {
         onBoardingIntro(navController)
@@ -58,17 +57,22 @@ private fun NavGraphBuilder.onBoardingLogin(
 ) {
     composable(Destinations.Login.routeTemplate) {
         LoginScreen(
-            viewModel = hiltViewModel(),
+            onLoginClick = {
+                navController.navigate(Destinations.Home.createRoute())
+            }
         )
     }
 }
 
 private fun NavGraphBuilder.onBoardingIntro(navController: NavController) {
     composable(Destinations.Intro.routeTemplate) {
-        IntroScreen()
+        IntroScreen(
+            onNextClick = {
+                navController.navigate(Destinations.Login.createRoute())
+            }
+        )
     }
 }
-
 
 private fun NavGraphBuilder.homePage(
     navController: NavController
