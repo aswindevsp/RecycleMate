@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.gshop.ui.navigation.Destinations
 import com.nstorm.recyclemate.ui.screens.homePages.home.HomeScreen
 import com.nstorm.recyclemate.ui.screens.onboarding.intro.IntroScreen
 import com.nstorm.recyclemate.ui.screens.onboarding.login.LoginScreen

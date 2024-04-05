@@ -79,4 +79,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+    implementation("androidx.compose.material:material-icons-extended")
+
 }

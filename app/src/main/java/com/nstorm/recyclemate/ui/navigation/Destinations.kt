@@ -1,4 +1,4 @@
-package com.example.gshop.ui.navigation
+package com.nstorm.recyclemate.ui.navigation
 
 sealed class Destinations(val routeTemplate: String) {
     sealed class NoArgs(route: String) : Destinations(route) {
