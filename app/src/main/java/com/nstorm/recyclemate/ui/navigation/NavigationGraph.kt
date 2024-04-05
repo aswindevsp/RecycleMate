@@ -4,22 +4,27 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.gshop.ui.navigation.Destinations
+import com.nstorm.recyclemate.ui.screens.homePages.home.HomeScreen
+import com.nstorm.recyclemate.ui.screens.onboarding.intro.IntroScreen
 import com.nstorm.recyclemate.ui.screens.onboarding.login.LoginScreen
 
 @Composable
-fun NavigationGraph() {
-    val navController = rememberNavController()
+fun NavigationGraph(
+    navController: NavHostController = rememberNavController(),
+) {
+
     NavHost(
         navController = navController,
         startDestination = Destinations.OnBoarding.routeTemplate,
     ) {
         onBoardingGraph(navController)
-        //homeGraph(navController)
+        homePagesGraph(navController)
     }
 
 }
@@ -31,9 +36,19 @@ private fun NavGraphBuilder.onBoardingGraph(
         startDestination = Destinations.Login.createRoute(),
         route = Destinations.OnBoarding.routeTemplate
     ) {
-
+        onBoardingIntro(navController)
         onBoardingLogin(navController)
-        onBoardingOtp(navController)
+    }
+}
+
+private fun NavGraphBuilder.homePagesGraph(
+    navController: NavController
+) {
+    navigation(
+        startDestination = Destinations.Home.createRoute(),
+        route = Destinations.HomePages.routeTemplate
+    ) {
+        homePage(navController)
     }
 }
 
@@ -44,20 +59,22 @@ private fun NavGraphBuilder.onBoardingLogin(
 ) {
     composable(Destinations.Login.routeTemplate) {
         LoginScreen(
-            viewModel = hiltViewModel()
+            viewModel = hiltViewModel(),
         )
     }
 }
 
-private fun NavGraphBuilder.onBoardingOtp(
-    navController: NavController
-) {
-    composable(Destinations.Otp.routeTemplate) {
-//        IdkSOmething(
-//            navigateUp = {
-//                navController.popBackStack()
-//            }
+private fun NavGraphBuilder.onBoardingIntro(navController: NavController) {
+    composable(Destinations.Intro.routeTemplate) {
+        IntroScreen()
     }
 }
 
 
+private fun NavGraphBuilder.homePage(
+    navController: NavController
+) {
+    composable(Destinations.Home.routeTemplate) {
+        HomeScreen()
+    }
+}

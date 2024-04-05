@@ -8,7 +8,11 @@ sealed class Destinations(val routeTemplate: String) {
 
 
     data object OnBoarding : TopLevelDestination("onBoarding")
+    data object HomePages: TopLevelDestination("homePages")
+
     data object Login : NoArgs("onBoarding/login")
-    data object Otp : NoArgs("onBoarding/otp")
+    data object Intro: NoArgs("onBoarding/intro")
+    data object Home: NoArgs("homePages/home")
+
 
 }
