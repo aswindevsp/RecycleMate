@@ -20,10 +20,12 @@ import javax.inject.Inject
 import okhttp3.RequestBody.Companion.toRequestBody
 
 import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import java.io.ByteArrayOutputStream
+import java.util.concurrent.TimeUnit
 
 interface YourApi {
     @Multipart
@@ -32,14 +34,14 @@ interface YourApi {
 }
 
 data class ApiResponse(
-    val classes: List<String>
+    val classes: String
 )
 
 data class ImageUploadRequest(val image: String)
 data class ImageUploadResponse(
     val success: Boolean,
     val message: String,
-    val classes: List<String>
+    val classes: String
 )
 
 data class UiState(
@@ -51,11 +53,20 @@ data class UiState(
 class CamerViewModel @Inject constructor() : ViewModel() {
     private var capturedImage: MutableLiveData<Bitmap> = MutableLiveData()
 
-    private  val _uiState = MutableStateFlow(UiState())
+    private val _uiState = MutableStateFlow(UiState())
 
     val uiState: StateFlow<UiState> get() = _uiState
+
+
+    val okHttpClient = OkHttpClient.Builder()
+        .readTimeout(60, TimeUnit.SECONDS) // Set your desired timeout duration
+        .writeTimeout(60, TimeUnit.SECONDS) // Set your desired timeout duration
+        .connectTimeout(60, TimeUnit.SECONDS) // Set your desired timeout duration
+        .build()
+
     private val retrofit = Retrofit.Builder()
         .baseUrl("http://192.168.107.235:5000/")
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -101,6 +112,7 @@ class CamerViewModel @Inject constructor() : ViewModel() {
 
             override fun onFailure(call: Call<ImageUploadResponse>, t: Throwable) {
                 // Handle the failure
+                Log.d("testing", "timedout")
                 _uiState.value = uiState.value.copy(isLoading = false)
             }
         }

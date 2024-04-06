@@ -2,7 +2,11 @@ package com.nstorm.recyclemate.ui.screens.homePages.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,10 +18,15 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DocumentScanner
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,33 +37,87 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nstorm.recyclemate.R
+import com.nstorm.recyclemate.ui.screens.homePages.camerax.CameraScreen
+
 
 @Composable
 fun HomeScreen() {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var selectedTab by remember { mutableIntStateOf(0) }
+    val tabs = listOf("Home", "Scan", "Location")
     Scaffold(
         topBar = {
             AppTopBar()
+        },
+        bottomBar = {
+            AppBottomBar(
+                onClick = { index ->
+                    selectedTab = index
+                },
+            )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            RecycleScoreCard()
-            Materials()
-            TipsAndTricks()
+        when (selectedTab) {
+            0 -> HomeScreens(modifier = Modifier.padding(innerPadding))
+            1 -> CameraScreen(
+                lifecycleOwner = lifecycleOwner,
+                viewmodel = hiltViewModel()
+            )
+
+            2 -> Text("Location")
+        }
+    }
+}
+
+@Composable
+fun HomeScreens(
+    modifier: Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        LazyColumn {
+            item {
+                RecycleScoreCard()
+            }
+            item {
+                Materials()
+            }
+            item {
+                TipsAndTricks()
+            }
+            item {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(20.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(1.dp, Color.Gray, RoundedCornerShape(20.dp)),
+                    painter = painterResource(id = R.drawable.mapsholder),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+
+                )
+            }
         }
     }
 }
@@ -172,12 +235,14 @@ fun Materials() {
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "Materials",
+            modifier = Modifier
+                .padding(bottom = 10.dp),
+            text = "Recyclable Materials",
             fontWeight = FontWeight.Bold,
         )
         HorizontalPager(
             state = state,
-            pageSize = PageSize.Fixed(130.dp)
+            pageSize = PageSize.Fixed(110.dp)
         ) { page: Int ->
             val material = materials.keys.elementAt(page)
             val materialName = materials[material]!!
@@ -187,7 +252,8 @@ fun Materials() {
                         .padding(end = 10.dp)
                         .clip(RoundedCornerShape(20.dp))
                         .height(110.dp)
-                        .width(100.dp),
+                        .width(100.dp)
+                        .border(1.dp, Color.Gray, RoundedCornerShape(20.dp)),
                     painter = painterResource(id = material),
                     contentDescription = "",
                     contentScale = ContentScale.FillBounds
@@ -210,9 +276,11 @@ fun TipsAndTricks() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp, vertical = 18.dp)
-            .height(200.dp)
+            .height(170.dp)
     ) {
         Text(
+            modifier = Modifier
+                .padding(bottom = 10.dp),
             text = "Tips and tricks",
             fontWeight = FontWeight.Bold,
         )
@@ -239,11 +307,12 @@ fun TipsAndTricks() {
                 ) {
                     Icon(
                         modifier = Modifier
+                            .padding(10.dp)
                             .size(60.dp),
                         painter = painterResource(id = R.drawable.recycle_logo),
                         contentDescription = "",
                     )
-                    Text(text = "Hello WOrld?")
+                    Text(text = "Recycling")
                 }
             }
 
@@ -268,14 +337,66 @@ fun TipsAndTricks() {
                 ) {
                     Icon(
                         modifier = Modifier
+                            .padding(10.dp)
                             .size(60.dp),
-                        painter = painterResource(id = R.drawable.recycle_logo),
+                        painter = painterResource(id = R.drawable.compose),
                         contentDescription = "",
                     )
-                    Text(text = "Hello WOrld?")
+                    Text(text = "Composting")
                 }
 
             }
         }
     }
+}
+
+
+@Composable
+fun AppBottomBar(onClick: (Int) -> Unit) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 25.dp)
+            .padding(horizontal = 10.dp),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        Icon(
+            modifier = Modifier
+                .padding(10.dp)
+                .size(40.dp)
+                .clickable {
+                    onClick(0)
+                },
+            imageVector = Icons.Filled.Home,
+            contentDescription = ""
+        )
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+        ) {
+            Icon(
+                modifier = Modifier
+                    .padding(17.dp)
+                    .size(40.dp)
+                    .clickable {
+                        onClick(1)
+                    },
+                imageVector = Icons.Filled.DocumentScanner,
+                contentDescription = ""
+            )
+        }
+        Icon(
+            modifier = Modifier
+                .padding(10.dp)
+                .size(40.dp)
+                .clickable {
+                    onClick(2)
+                },
+            imageVector = Icons.Filled.LocationOn,
+            contentDescription = ""
+        )
+    }
+
 }
